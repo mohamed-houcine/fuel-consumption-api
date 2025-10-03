@@ -1,0 +1,41 @@
+[
+  {
+    "city08": 20.0,
+    "highway08": 30.0,
+    "displ": 2.0,
+    "cylinders": 4,
+    "drive": "FWD",
+    "fuelType": "Regular Gasoline",
+    "fuelType1": "",
+    "fuelType2": "",
+    "model_grouped": "Corolla",
+    "make_grouped": "Toyota",
+    "VClass_grouped": "Compact Cars"
+  },
+  {
+    "city08": 18.0,
+    "highway08": 27.0,
+    "displ": 3.0,
+    "cylinders": 6,
+    "drive": "AWD",
+    "fuelType": "Premium Gasoline",
+    "fuelType1": "",
+    "fuelType2": "",
+    "model_grouped": "Accord",
+    "make_grouped": "Honda",
+    "VClass_grouped": "Midsize Cars"
+  },
+  {
+    "city08": 25.0,
+    "highway08": 35.0,
+    "displ": 1.8,
+    "cylinders": 4,
+    "drive": "FWD",
+    "fuelType": "Regular Gasoline",
+    "fuelType1": "",
+    "fuelType2": "",
+    "model_grouped": "Golf",
+    "make_grouped": "Volkswagen",
+    "VClass_grouped": "Compact Cars"
+  }
+]

@@ -1,0 +1,23 @@
+runing api :
+python -m uvicorn main:app --reload --host 127.0.0.1 --port 8000
+& ".\.venv\Scripts\python.exe" -m uvicorn main:app --reload --host 127.0.0.1 --port 8000
+
+runing docker :
+docker build -t fuel-consumption-api .
+docker run -p 8000:8000 fuel-consumption-api
+
+
+TEST:
+{
+  "city08": 20.0,
+  "highway08": 30.0,
+  "displ": 2.0,
+  "cylinders": 4,
+  "drive": "FWD",
+  "fuelType": "Regular Gasoline",
+  "fuelType1": null,
+  "fuelType2": null,
+  "model_grouped": "Corolla",
+  "make_grouped": "Toyota",
+  "VClass_grouped": "Compact Cars"
+}

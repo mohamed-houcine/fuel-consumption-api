@@ -1,0 +1,161 @@
+# 🚗 Fuel Consumption Prediction API
+
+A FastAPI service to predict vehicle fuel consumption (MPG) based on vehicle technical specifications.
+
+## 📋 Overview
+
+This API uses a trained Random Forest model to predict a vehicle's fuel consumption (in MPG) from features such as engine displacement, number of cylinders, fuel type, drive type, and more.
+
+## 🚀 Installation & Start
+
+### Requirements
+
+```bash
+pip install fastapi uvicorn pandas scikit-learn joblib
+```
+
+### Start the server
+
+```bash
+python main.py
+```
+
+The API will be available at: `http://127.0.0.1:8000`
+
+## 📊 Available Endpoints
+
+### 1. **GET /** — Health Check
+
+* **Description:** Check API status
+* **Response:** `{"service": "Fuel consumption prediction", "status": "OK"}`
+
+### 2. **GET /predict/selection** — Prediction with query parameters
+
+* **Description:** Predict using individual parameters (query string / dropdown-style inputs).
+* **Parameters:**
+
+  * **Numeric:** `city08`, `highway08`, `displ`, `cylinders`
+  * **Categorical:** `drive`, `fuelType`, `fuelType1`, `fuelType2`, `model_grouped`, `make_grouped`, `VClass_grouped`
+* **Example:**
+
+  ```
+  /predict/selection?city08=25&highway08=35&cylinders=4&drive=Front-Wheel%20Drive
+  ```
+
+### 3. **POST /predict/file** — Prediction from file upload
+
+* **Description:** Upload a text file containing one vehicle or a list of vehicles to predict.
+* **Supported formats:**
+
+  * JSON (object or list)
+  * CSV
+  * key=value text format (recommended)
+* **Example file (key=value format):**
+
+  ```text
+  city08=25
+  highway08=35
+  displ=2.5
+  cylinders=4
+  drive=Front-Wheel Drive
+  fuelType=Regular
+  ```
+
+## 🔧 Model Files
+
+### 1. **rf_tuned.joblib**
+
+* **What it is:** Trained and tuned Random Forest model file.
+* **Limitation:** Expects preprocessed input (you must apply the same preprocessing used during training).
+* **Usage notes:** Apply `pd.get_dummies()` (or equivalent), align columns to the training set ordering, and ensure all expected dummy columns exist.
+
+### 2. **feature_names.joblib**
+
+* **What it is:** List of exact column names (features) expected by the model.
+* **Usage:** Use this to align the DataFrame columns to the exact set the model was trained on.
+* **Example:** `['city08', 'highway08', 'drive_FWD', 'drive_RWD', ...]`
+
+### 3. **medians.joblib**
+
+* **What it is:** Dictionary of median values for numeric features from the training data.
+* **Usage:** Use these medians to fill missing numeric values consistently with training preprocessing.
+* **Example:** `{'city08': 24.0, 'highway08': 31.0, ...}`
+
+## 📝 Input Variables
+
+### Numeric Variables
+
+* **city08** — City fuel consumption (MPG). Range: 1–150
+* **highway08** — Highway fuel consumption (MPG). Range: 1–150
+* **displ** — Engine displacement (liters). Range: 0.5–10.0
+* **cylinders** — Number of cylinders. Range: 2–16
+
+### Categorical Variables
+
+* **drive** — Drive type (e.g., `Front-Wheel Drive`, `Rear-Wheel Drive`, etc.)
+* **fuelType** — Fuel family (e.g., `Regular`, `Premium`, `Diesel`, etc.)
+* **fuelType1** — Primary fuel (e.g., `Regular Gasoline`, `Premium Gasoline`, etc.)
+* **fuelType2** — Secondary fuel or special fuel label (e.g., `missing`, `Natural Gas`, `E85`, etc.)
+* **model_grouped** — Grouped vehicle model (e.g., `Civic`, `Accord`, `F150 Pickup 2WD`, etc.)
+* **make_grouped** — Grouped manufacturer (e.g., `Toyota`, `Ford`, `BMW`, etc.)
+* **VClass_grouped** — Vehicle class group (e.g., `Compact Cars`, `Midsize Cars`, etc.)
+
+## 🎯 API Response
+
+Example response body:
+
+```json
+{
+  "prediction": 28.5,
+  "unit": "mpg",
+  "description": "Predicted fuel consumption",
+  "status": "success",
+  "vehicle_data": { /* echoed or processed input features */ }
+}
+```
+
+## 📖 Interactive Documentation
+
+Once the server is running, interactive docs are available at:
+
+* **Swagger UI:** `http://127.0.0.1:8000/docs`
+* **ReDoc:** `http://127.0.0.1:8000/redoc`
+
+## 🔍 Usage Examples
+
+### Using curl
+
+```bash
+curl -X GET "http://127.0.0.1:8000/predict/selection?city08=25&highway08=35&cylinders=4&drive=Front-Wheel%20Drive&fuelType=Regular&make_grouped=Toyota"
+```
+
+### Using Python
+
+```python
+import requests
+
+response = requests.get("http://127.0.0.1:8000/predict/selection", params={
+    "city08": 25,
+    "highway08": 35,
+    "cylinders": 4,
+    "drive": "Front-Wheel Drive",
+    "fuelType": "Regular",
+    "make_grouped": "Toyota"
+})
+
+print(response.json())
+```
+
+## 📁 Project Structure
+
+```
+Fast Api/
+├── main.py              # Main FastAPI application
+├── rf_tuned.joblib      # Random Forest model
+├── feature_names.joblib # Expected feature names
+├── medians.joblib       # Median values for numeric features
+├── vehicles.csv         # Original dataset
+├── fuel_consump.ipynb   # Analysis notebook
+└── readme               # This file
+```
+
